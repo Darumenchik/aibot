@@ -23,7 +23,6 @@ dependencies {
 
     // Koin Android
     implementation(libs.koin.android)
-    implementation(libs.koin.androidx.viewmodel.compose)
 
     implementation(libs.compose.uiToolingPreview)
     debugImplementation(libs.compose.uiTooling)
