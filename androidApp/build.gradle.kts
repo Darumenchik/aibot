@@ -2,8 +2,9 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.kotlinAndroid)
 }
+
+apply(plugin = "org.jetbrains.kotlin.android")
 
 android {
     namespace = "com.chiper.kz"
