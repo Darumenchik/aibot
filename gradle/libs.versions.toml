@@ -51,7 +51,6 @@ koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = 
 
 # Voyager
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
-voyager-screen = { module = "cafe.adriel.voyager:voyager-screen", version.ref = "voyager" }
 voyager-tabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 
@@ -74,7 +73,6 @@ datastore-core = { module = "androidx.datastore:datastore-core", version.ref = "
 datastore-rxjava3 = { module = "androidx.datastore:datastore-rxjava3", version.ref = "datastore" }
 
 # Markdown
-markdown-compose = { module = "io.github.rosemoe:markdown-compose", version.ref = "markdown" }
 
 # Lottie
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }

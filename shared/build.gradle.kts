@@ -48,7 +48,6 @@ kotlin {
             implementation(libs.koin.compose)
 
             implementation(libs.voyager.navigator)
-            implementation(libs.voyager.screen)
             implementation(libs.voyager.tabNavigator)
             implementation(libs.voyager.koin)
 
@@ -62,7 +61,6 @@ kotlin {
             implementation(libs.coroutines.core)
 
             implementation(libs.datastore.preferences)
-            implementation(libs.markdown.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
