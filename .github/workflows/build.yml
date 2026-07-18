@@ -1,27 +1,39 @@
 name: Build Android APK
-on: [push, pull_request]
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+    - name: Checkout Code
+      uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
 
-      - name: Make gradle wrapper executable
-        run: chmod +x ./gradlew
+    - name: Make gradle wrapper executable
+      run: chmod +x gradlew
 
-      - name: Build APK
-        run: ./gradlew :androidApp:assembleDebug -q --console=plain
+    - name: Build APK and Catch Errors
+      run: |
+        ./gradlew :androidApp:assembleDebug --no-daemon > build_log.txt 2>&1 || true
+        grep -E "e: file://" build_log.txt > errors.txt || true
+        cat errors.txt
+        if [ -s errors.txt ]; then exit 1; fi
+        if ! grep -q "BUILD SUCCESSFUL" build_log.txt; then tail -n 100 build_log.txt && exit 1; fi
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-debug
-          path: '**/build/outputs/apk/debug/*.apk'
+    - name: Upload Error Log if Failed
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: compilation-errors
+        path: errors.txt
