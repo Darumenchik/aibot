@@ -5,8 +5,10 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,34 +31,25 @@ import com.chiper.kz.screens.groups.GroupsScreen
 import com.chiper.kz.screens.channels.ChannelsScreen
 import com.chiper.kz.screens.onboarding.OnboardingScreen
 import com.chiper.kz.screens.profile.ProfileScreen
-import com.chiper.kz.theme.AppTheme
-import com.chiper.kz.theme.ChiperTheme
 import com.chiper.kz.theme.AnimatedChiperTheme
-import com.chiper.kz.theme.glass.GlassTypography
-import com.chiper.kz.utils.KeyboardHandler
-import org.jetbrains.compose.resources.painterResource
+import kotlinx.coroutines.delay
 
 @Composable
 fun App() {
-    val themeViewModel = androidx.lifecycle.viewmodel.viewModel<ThemeViewModel>()
-    
+    val themeViewModel = androidx.lifecycle.viewmodel.viewModel { ThemeViewModel() }
     AnimatedChiperTheme(viewModel = themeViewModel) {
         var showSplash by remember { mutableStateOf(true) }
         var showOnboarding by remember { mutableStateOf(false) }
 
         if (showSplash) {
-            SplashScreenContent(onSplashFinished = { 
+            SplashScreenContent(onSplashFinished = {
                 showSplash = false
                 showOnboarding = true
             })
         } else if (showOnboarding) {
-            Navigator(screen = OnboardingScreen()) { navigator ->
-                // Onboarding handles its own navigation
-            }
+            Navigator(screen = OnboardingScreen())
         } else {
-            Navigator(screen = AuthScreen()) { navigator ->
-                // Auth handles its own navigation to MainTabScreen
-            }
+            Navigator(screen = AuthScreen())
         }
     }
 }
@@ -140,9 +133,7 @@ private fun SplashScreenContent(onSplashFinished: () -> Unit) {
                     )
                 }
             }
-
             Spacer(modifier = Modifier.height(24.dp))
-
             Text(
                 text = "Chiper",
                 color = Color.White,
@@ -150,9 +141,7 @@ private fun SplashScreenContent(onSplashFinished: () -> Unit) {
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.alpha(textAlpha)
             )
-
             Spacer(modifier = Modifier.height(8.dp))
-
             Text(
                 text = "Быстрый. Безопасный. Твой.",
                 color = Color.White.copy(alpha = 0.8f),
@@ -176,14 +165,7 @@ class MainTabScreen : Screen {
                     ) {
                         val tabNavigator = LocalTabNavigator.current
                         NavigationBarItem(
-                            icon = {
-                                Icon(
-                                    if (tabNavigator.current.key == ChatListTab.key)
-                                        Icons.Filled.Chat
-                                    else Icons.Outlined.Chat,
-                                    contentDescription = "Чаты"
-                                )
-                            },
+                            icon = { Icon(Icons.Filled.Home, contentDescription = "Чаты") },
                             label = { Text("Чаты") },
                             selected = tabNavigator.current.key == ChatListTab.key,
                             onClick = { tabNavigator.current = ChatListTab },
@@ -196,14 +178,7 @@ class MainTabScreen : Screen {
                             )
                         )
                         NavigationBarItem(
-                            icon = {
-                                Icon(
-                                    if (tabNavigator.current.key == GroupsTab.key)
-                                        Icons.Filled.Groups
-                                    else Icons.Outlined.Groups,
-                                    contentDescription = "Группы"
-                                )
-                            },
+                            icon = { Icon(Icons.Filled.List, contentDescription = "Группы") },
                             label = { Text("Группы") },
                             selected = tabNavigator.current.key == GroupsTab.key,
                             onClick = { tabNavigator.current = GroupsTab },
@@ -216,14 +191,7 @@ class MainTabScreen : Screen {
                             )
                         )
                         NavigationBarItem(
-                            icon = {
-                                Icon(
-                                    if (tabNavigator.current.key == ChannelsTab.key)
-                                        Icons.Filled.Campaign
-                                    else Icons.Outlined.Campaign,
-                                    contentDescription = "Каналы"
-                                )
-                            },
+                            icon = { Icon(Icons.Filled.Notifications, contentDescription = "Каналы") },
                             label = { Text("Каналы") },
                             selected = tabNavigator.current.key == ChannelsTab.key,
                             onClick = { tabNavigator.current = ChannelsTab },
@@ -236,14 +204,7 @@ class MainTabScreen : Screen {
                             )
                         )
                         NavigationBarItem(
-                            icon = {
-                                Icon(
-                                    if (tabNavigator.current.key == ProfileTab.key)
-                                        Icons.Filled.Person
-                                    else Icons.Outlined.Person,
-                                    contentDescription = "Профиль"
-                                )
-                            },
+                            icon = { Icon(Icons.Filled.Person, contentDescription = "Профиль") },
                             label = { Text("Профиль") },
                             selected = tabNavigator.current.key == ProfileTab.key,
                             onClick = { tabNavigator.current = ProfileTab },
@@ -257,8 +218,10 @@ class MainTabScreen : Screen {
                         )
                     }
                 }
-            ) {
-                CurrentTab()
+            ) { paddingValues ->
+                Box(modifier = Modifier.padding(paddingValues)) {
+                    CurrentTab()
+                }
             }
         }
     }
@@ -266,60 +229,40 @@ class MainTabScreen : Screen {
 
 object ChatListTab : Tab {
     private fun readResolve(): Any = ChatListTab
-
     override val options: TabOptions
         @Composable
-        get() = remember {
-            TabOptions(index = 0u, title = "Чаты", icon = Icons.Outlined.Chat)
-        }
+        get() = remember { TabOptions(index = 0u, title = "Чаты", icon = Icons.Filled.Home) }
 
     @Composable
-    override fun Content() {
-        ChatListScreen().Content()
-    }
+    override fun Content() { ChatListScreen().Content() }
 }
 
 object GroupsTab : Tab {
     private fun readResolve(): Any = GroupsTab
-
     override val options: TabOptions
         @Composable
-        get() = remember {
-            TabOptions(index = 1u, title = "Группы", icon = Icons.Outlined.Groups)
-        }
+        get() = remember { TabOptions(index = 1u, title = "Группы", icon = Icons.Filled.List) }
 
     @Composable
-    override fun Content() {
-        GroupsScreen().Content()
-    }
+    override fun Content() { GroupsScreen().Content() }
 }
 
 object ChannelsTab : Tab {
     private fun readResolve(): Any = ChannelsTab
-
     override val options: TabOptions
         @Composable
-        get() = remember {
-            TabOptions(index = 2u, title = "Каналы", icon = Icons.Outlined.Campaign)
-        }
+        get() = remember { TabOptions(index = 2u, title = "Каналы", icon = Icons.Filled.Notifications) }
 
     @Composable
-    override fun Content() {
-        ChannelsScreen().Content()
-    }
+    override fun Content() { ChannelsScreen().Content() }
 }
 
 object ProfileTab : Tab {
     private fun readResolve(): Any = ProfileTab
-
     override val options: TabOptions
         @Composable
-        get() = remember {
-            TabOptions(index = 3u, title = "Профиль", icon = Icons.Outlined.Person)
-        }
+        get() = remember { TabOptions(index = 3u, title = "Профиль", icon = Icons.Filled.Person) }
 
     @Composable
-    override fun Content() {
-        ProfileScreen().Content()
-    }
+    override fun Content() { ProfileScreen().Content() }
 }
