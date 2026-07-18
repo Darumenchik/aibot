@@ -19,10 +19,10 @@ ktor = "3.1.1"
 kotlin = "2.3.21"
 kotlin-wrappers = "2026.5.3"
 lottie = "6.4.0"
-markdown = "0.3.2"
+markdown = "0.3.1"
 material3 = "1.11.0-alpha07"
 serialization = "1.7.3"
-voyager = "1.1.0-alpha06"                                     
+voyager = "1.0.0"                                     
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
